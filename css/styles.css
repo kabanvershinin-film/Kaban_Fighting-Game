@@ -1,165 +1,241 @@
-@font-face {
-    font-family: 'silver';
-    src: url(../assets/fonts/Silver.ttf);
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    box-sizing: border-box;
-    background-color: seashell
+  background: #0a0a0f;
+  font-family: 'Press Start 2P', monospace;
+  color: #fff;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
 }
 
-.container {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    padding-top: 50px;
+/* ====== MENU ====== */
+#menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: radial-gradient(ellipse at center, #1a0a2e 0%, #0a0a0f 70%);
+  position: relative;
 }
 
-.hud {
-    position: absolute;
-    display: none;
-    width: 50%;
-    align-items: center;
-    padding: 20px;
+#menu::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(255,255,255,0.015) 2px,
+    rgba(255,255,255,0.015) 4px
+  );
+  pointer-events: none;
 }
 
-.healthLayout {
-    position: relative;
-    height: 30px;
-    width: 100%;
+#game-title {
+  font-size: clamp(20px, 5vw, 40px);
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 0 20px #ff4444, 0 0 40px #ff2222;
+  line-height: 1.6;
+  margin-bottom: 48px;
+  animation: titlePulse 2s ease-in-out infinite;
 }
 
-.remainingHealthbar {
-    background-color: #EF4444;
-    height: 30px;
-    width: 100%;
+#game-title span {
+  font-size: 0.5em;
+  color: #aaa;
+  text-shadow: none;
+  letter-spacing: 0.1em;
 }
 
-.totalHealthBar {
-    position: absolute;
-    background-color: #8B5CF6;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    display: flex;
+@keyframes titlePulse {
+  0%, 100% { text-shadow: 0 0 20px #ff4444, 0 0 40px #ff2222; }
+  50% { text-shadow: 0 0 30px #ff6666, 0 0 60px #ff4444, 0 0 80px #ff0000; }
 }
 
-.timer {
-    background-color: wheat;
-    font-family: 'silver';
-    font-size: 35px;
-    height: 50px;
-    width: 75px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
+#menu-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 40px;
 }
 
-.result {
-    position: absolute;
-    font-family: 'silver';
-    font-size: 100px;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    color: wheat;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    text-shadow: 1px 0 0 black, -1px 0 0 black, 0 1px 0 black, 0 -1px 0 black, 1px 1px black, -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black;
+.menu-btn {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(10px, 2vw, 14px);
+  color: #fff;
+  background: transparent;
+  border: 2px solid #ff4444;
+  padding: 16px 32px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-shadow: 0 0 8px #ff4444;
+  position: relative;
+  overflow: hidden;
 }
 
-.game {
-    display: flex;
-    width: 100%;
-    align-items: center;
-    justify-content: center;
+.menu-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #ff4444;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s;
+  z-index: -1;
 }
 
-#gameWindow {
-    border: 2px solid black;
+.menu-btn:hover::before { transform: scaleX(1); }
+.menu-btn:hover { color: #000; text-shadow: none; }
+.menu-btn:active { transform: scale(0.96); }
+
+#made-by {
+  font-size: 8px;
+  color: #444;
+  letter-spacing: 0.1em;
 }
 
-.keymapping {
-    display: flex;
-    justify-content: center;
-    font-family: 'silver';
-    font-size: 40px;
+/* ====== GAME SCREEN ====== */
+#game {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
 }
 
-.keys {
-    margin: 30px;
-    padding: 40px;
-    border: 2px solid black;
+#canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
-.keys h1 {
-    margin: 0px
+/* ====== HUD ====== */
+#hud {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 12px 16px;
+  z-index: 10;
+  gap: 12px;
 }
 
-.menu {
-    font-family: silver;
-    color: black;
-    position: absolute;
-    width: 1024px;
-    height: 576px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+#left-hud, #right-hud {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-.title {
-    font-size: 160px;
+#right-hud {
+  align-items: flex-end;
 }
 
-.menuOption {
-    border: solid black;
-    border-width: 1px 5px 5px 1px;
-    font-size: 60px;
-    padding: 10px 20px 5px 10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    cursor: pointer;
-    transition: color .3s ease-in-out, box-shadow .3s ease-in-out;
+.fighter-name {
+  font-size: clamp(7px, 1.5vw, 11px);
+  color: #fff;
+  text-shadow: 0 0 8px currentColor;
+  white-space: nowrap;
 }
 
-.menuOption:hover {
-    box-shadow: inset 350px 0 0 0 #9eade9;
-    color: black;
+.health-bar-wrap {
+  width: 100%;
+  height: 14px;
+  background: #222;
+  border: 1px solid #555;
+  position: relative;
 }
 
-.author {
-    padding-top: 10px;
-    font-size: 30px;
-    font-style: italic;
+.health-bar {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, #00cc44, #44ff66);
+  transition: width 0.2s ease, background 0.3s;
 }
 
-.animate-charcter {
-    text-transform: uppercase;
-    background-image: linear-gradient(-225deg,
-            #231557 0%,
-            #44107a 29%,
-            #A8EEE3 67%,
-            #9eade9 100%);
-    background-size: auto auto;
-    background-clip: border-box;
-    background-size: 200% auto;
-    color: #fff;
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: textclip 2s linear infinite;
-    display: inline-block;
-    font-size: 190px;
+.health-bar.low {
+  background: linear-gradient(90deg, #cc2200, #ff4422);
 }
 
-@keyframes textclip {
-    to {
-        background-position: 200% center;
-    }
+#timer-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  background: rgba(0,0,0,0.6);
+  border: 1px solid #444;
 }
+
+#timer {
+  font-size: clamp(16px, 3vw, 28px);
+  color: #fff;
+  text-shadow: 0 0 12px #fff;
+}
+
+/* ====== RESULT ====== */
+#result-display {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: clamp(14px, 3vw, 28px);
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 0 20px #ff4444, 0 0 40px #ff2222;
+  z-index: 20;
+  display: none;
+  animation: resultAnim 0.4s ease-out;
+}
+
+@keyframes resultAnim {
+  from { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+  to   { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+
+/* ====== CONTROLS HINT ====== */
+#controls-hint {
+  position: absolute;
+  bottom: 12px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 10;
+}
+
+.control-block {
+  font-size: clamp(6px, 1.2vw, 9px);
+  color: #555;
+  line-height: 1.8;
+}
+
+/* ====== BACK BUTTON ====== */
+#back-btn {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  color: #555;
+  background: transparent;
+  border: 1px solid #333;
+  padding: 6px 12px;
+  cursor: pointer;
+  z-index: 30;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+#back-btn:hover { color: #fff; border-color: #fff; }
