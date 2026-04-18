@@ -1,77 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/styles.css">
-    <title>Fighting game</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🐗 Kaban Fighting Game</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script>
+    if (window.Telegram && window.Telegram.WebApp) {
+      const tg = window.Telegram.WebApp;
+      tg.ready();
+      tg.expand();
+    }
+  </script>
 </head>
-
 <body>
+  <!-- MENU -->
+  <div id="menu">
+    <h1 id="game-title">🐗 KABAN<br/><span>FIGHTING GAME</span></h1>
+    <div id="menu-buttons">
+      <button class="menu-btn" id="btn-vs-ai">⚔️ Кабан vs ИИ</button>
+      <button class="menu-btn" id="btn-vs-player">👥 Кабан vs Ноунейм</button>
+    </div>
+    <p id="made-by">by Kaban 🐗</p>
+  </div>
 
-    <div class="container">
-
-        <div id="menu" class="menu">
-
-            <div class="title; animate-charcter">
-                Fighting Game!
-            </div>
-            <div class="options">
-                <div id="1player" class="menuOption">
-                    Player vs AI
-                </div>
-                <div id="2players" class="menuOption">
-                    Player vs Player
-                </div>
-            </div>
-            <div class="author">Made by Adrizen</div>
+  <!-- GAME -->
+  <div id="game" style="display:none;">
+    <div id="hud">
+      <div id="left-hud">
+        <div class="fighter-name" id="p1-name">🐗 Кабан</div>
+        <div class="health-bar-wrap">
+          <div class="health-bar" id="p1-health"></div>
         </div>
-
-        <div id="hud" class="hud">
-
-            <!-- Player's health -->
-            <div class="healthLayout">
-                <div class="remainingHealthbar"></div>
-                <!-- TODO: Arreglar nombre barras. La vida del jugador se reduzca hacia el timer. -->
-                <div id="playerHealth" class="totalHealthBar"></div>
-            </div>
-            <!-- Timer -->
-            <div id="timer" class="timer"> -- </div>
-
-            <!-- Enemy's health -->
-            <div class="healthLayout">
-                <div class="remainingHealthbar"></div> <!-- TODO: Arreglar nombre barras. -->
-                <div id="enemyHealth" class="totalHealthBar"></div>
-            </div>
+      </div>
+      <div id="timer-wrap">
+        <div id="timer">60</div>
+      </div>
+      <div id="right-hud">
+        <div class="fighter-name" id="p2-name">❓ Ноунейм</div>
+        <div class="health-bar-wrap">
+          <div class="health-bar" id="p2-health"></div>
         </div>
-        <div id="result" class="result"> result </div>
-        <div class="game">
-            <canvas id="gameWindow"> </canvas>
-        </div>
-
+      </div>
     </div>
 
-    <div class="information">
-        <div class="keymapping">
-            <div class="keys">
-                <h1> Player 1 </h1>
-                <p> Movement: WASD </p>
-                <p> Attack: Spacebar </p>
-            </div>
-            <div class="keys">
-                <h1> Player 2 </h1>
-                <p> Movement: Arrow keys </p>
-                <p> Attack: Alt key (right) </p>
-            </div>
-        </div>
+    <div id="result-display"></div>
+    <canvas id="canvas"></canvas>
+
+    <div id="controls-hint">
+      <div class="control-block">
+        <b>🐗 Кабан</b><br/>
+        WASD — движение<br/>
+        Пробел — удар
+      </div>
+      <div class="control-block" id="p2-controls">
+        <b>❓ Ноунейм</b><br/>
+        ← → ↑ — движение<br/>
+        Alt — удар
+      </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js"
-        integrity="sha512-VEBjfxWUOyzl0bAwh4gdLEaQyDYPvLrZql3pw1ifgb6fhEvZl9iDDehwHZ+dsMzA0Jfww8Xt7COSZuJ/slxc4Q=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script type="module" src="../js/index.js"> </script>
+    <button id="back-btn">← Меню</button>
+  </div>
+
+  <script src="../js/classes.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/script.js"></script>
 </body>
-
 </html>
